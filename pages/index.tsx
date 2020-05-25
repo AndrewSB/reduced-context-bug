@@ -3,8 +3,11 @@ import { useWindowSize } from 'react-use'
 
 const DisplayContext = createContext<"normal" | "compact">("normal")
 
-export default function Parent() {
+type Props = {
+  fetched: string
+}
 
+export default function Parent({fetched}: Props) {
   const { width } = useWindowSize()
   const windowSizeDisplayContext = width > 800 ? "normal" : "compact"
 
@@ -12,6 +15,7 @@ export default function Parent() {
     <div className="container">
       <DisplayContext.Provider value={windowSizeDisplayContext}>
         <Child />
+        <p>{fetched}</p>
       </DisplayContext.Provider>
     </div>
   )
@@ -27,3 +31,13 @@ const Child: React.FC = () => {
     </div>
   )
 }
+
+export async function getStaticProps() {
+  const fetched = "fetched from service"
+  return {
+    props: {
+    fetched
+    }
+  }
+}
+
